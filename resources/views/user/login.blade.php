@@ -22,17 +22,7 @@
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "{{ $message }}"
-                });
-            </script>
-        @endif
-
-        @if ($message = Session::get('failed'))
-            <script>
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "{{ $message }}"
+                    text: "{{ session('success') }}"
                 });
             </script>
         @endif
@@ -78,6 +68,15 @@
         </script>
     @endif
     @if ($message = Session::get('login'))
+        <script>
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "{{ $message }}"
+            });
+        </script>
+    @endif
+    @if ($message = Session::get('failed'))
         <script>
             Swal.fire({
                 icon: "error",
