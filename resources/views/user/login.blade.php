@@ -22,7 +22,7 @@
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "{{ session('success') }}"
+                    text: "{{ $message }}"
                 });
             </script>
         @endif
@@ -32,7 +32,7 @@
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "{{ session('failed') }}"
+                    text: "{{ $message }}"
                 });
             </script>
         @endif

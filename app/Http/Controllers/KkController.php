@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class KkController extends Controller
 {
@@ -36,6 +37,26 @@ class KkController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'nokk' => [
+                'required',
+                'unique:kk,nokk',
+            ],
+            'statusaktif' => 'required',
+        ];
+
+        $messages = [
+            'nokk.unique' => 'No KK yang di-Inputkan sudah terdaftar',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect('kk/create')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $nokk = $request->nokk;
         $statusaktif = $request->statusaktif;
 
@@ -118,6 +139,7 @@ class KkController extends Controller
      */
     public function destroy(string $id)
     {
+
         $client = new Client();
         $url = "https://api-group8-prognet.manpits.xyz/api/kk/$id";
 

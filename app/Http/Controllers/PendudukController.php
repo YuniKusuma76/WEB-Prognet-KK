@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PendudukController extends Controller
 {
@@ -51,6 +52,29 @@ class PendudukController extends Controller
 
     public function simpanPenduduk(Request $request)
     {
+        $rules = [
+            'nik' => [
+                'required',
+                'unique:penduduk,nik',
+            ],
+            'nama' => 'required',
+            'alamat' => 'required',
+            'lahir' => 'required',
+            'agama_id' => 'required',
+        ];
+
+        $messages = [
+            'nik.unique' => 'Nik ini yang di-Inputkan sudah terdaftar',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect('penduduk/create')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $nik = $request->nik;
         $nama = $request->nama;
         $alamat = $request->alamat;
