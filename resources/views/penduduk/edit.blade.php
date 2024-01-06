@@ -79,13 +79,13 @@
                     </ul>
                 </div>
                 @endif
-              <form name="formAgama" action="/penduduk/{{ $penduduk['id'] }}/update" method="post" onsubmit="return validateForm()">
+              <form name="formAgama" action="/penduduk/{{ $penduduk['id'] }}/update" method="post">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
                     <label>NIK</label>
                     <input type="text" name="nik" id="nik" placeholder="NIK" class="form-control" 
-                           value="{{ isset($penduduk['nik'])?$penduduk['nik']:old['nik'] }}">
+                           value="{{ isset($penduduk['nik'])?$penduduk['nik']:old['nik'] }}" readonly>
                   </div>
                   <div class="form-group">
                     <label>Nama Penduduk</label>
