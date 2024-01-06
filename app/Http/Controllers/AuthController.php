@@ -30,11 +30,6 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return redirect()->route('register')->with('failed', 'Ada Kesalahan dalam Input Data');
-            return response()->json([
-                'success' => false,
-                'message' => 'Ada Kesalahan dalam Input Data',
-                'data' => $validator->errors()
-            ]);
         } else {
             $input = $request->all();
             $input['password'] = bcrypt($input['password']);
@@ -44,11 +39,6 @@ class AuthController extends Controller
             $success['email'] = $user->email;
 
             return redirect()->route('login')->with('success', 'Anda berhasil melakukan Registrasi, Please Login');
-            return response()->json([
-                'success' => true,
-                'message' => 'Registrasi Sukses Dilakukan',
-                'data' => $success
-            ]);
         }
     }
 
@@ -61,18 +51,8 @@ class AuthController extends Controller
             $success['email'] = $auth->email;
 
             return redirect()->route('dashboard')->with('success', 'Anda Berhasil Login');
-            return response()->json([
-                'success' => true,
-                'message' => 'Login Berhasil Dilakukan',
-                'data' => $success
-            ]);
         } else {
             return redirect()->route('login')->with('failed', 'Ada Kesalahan pada E-mail dan Password');
-            return response()->json([
-                'success' => false,
-                'message' => 'Ada Kesalahan pada Email dan Password',
-                'data' => null
-            ]);
         }
     }
 

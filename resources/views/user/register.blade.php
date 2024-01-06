@@ -17,19 +17,6 @@
 		<img src="img/foto3.svg">
 	  </div>
 	<div class="login-content">
-    @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
-    @endif
-
-		@if ($message = Session::get('failed'))
-			<script>
-				Swal.fire({
-					icon: "error",
-					title: "Oops...",
-					text: "{{ session('failed') }}"
-				});
-			</script>
-		@endif
 		<form action="/register" method="post">
 			@csrf
 			<h2 class="title">iFamilyCard</h2>
@@ -66,7 +53,7 @@
 				</div>
 				<div class="div">
 					<h5>Confirm Password</h5>
-					<input type="password" class="input" id="password_confirmation" name="password_confirmation">
+					<input type="password" class="input" id="confirm_password" name="confirm_password">
 				</div>
 			</div>
 			<a href="/" id="daftarLink">Sign In Here!</a>
@@ -77,6 +64,14 @@
     <script type="text/javascript" src="/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- Alert --}}
-    
+    @if ($message = Session::get('failed'))
+		<script>
+			Swal.fire({
+				icon: "error",
+				title: "Oops...",
+				text: "{{ $message }}"
+			});
+		</script>
+	@endif
 </body>
 </html>
