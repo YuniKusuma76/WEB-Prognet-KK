@@ -66,6 +66,39 @@
     
         <main>
           <div class="container">
+            <h1>Data Kartu Keluarga</h1>
+            <div class="card-body mb-5">
+              <table width=100%>
+              @foreach ($dataAnggotakk as $listAnggotakk)
+              @if ($listAnggotakk['kk_id'] == $kkId['id'])
+              <thead>
+                {{-- Kolom No KK --}}
+                <tr>
+                  <td>No. Kartu Keluarga</td>
+                  <td>: {{ app('App\Http\Controllers\DetailsController')->getNoKk($listAnggotakk['kk_id'], $dataKk) }}</td>
+                </tr>
+                {{-- Kolom Nama Kepala Keluarga --}}
+                <tr>
+                  <td>Kepala Keluarga</td>
+                  <td>: {{ app('App\Http\Controllers\DetailsController')->getNamaKepalaKeluarga($listAnggotakk['kk_id'], $dataKk, $dataHubungankk, $dataPenduduk, $dataAnggotakk) }}</td>
+                </tr>
+                {{-- Kolom Status Aktif KK --}}
+                <tr>
+                  <td>Status Aktif</td>
+                  <td>: {{ app('App\Http\Controllers\DetailsController')->statusAktif($listAnggotakk['kk_id'], $dataKk) }}</td>
+                </tr>
+                <tr>
+                  <td>Alamat</td>
+                  <td>: {{ app('App\Http\Controllers\DetailsController')->getAlamatKepalaKeluarga($listAnggotakk['kk_id'], $dataKk, $dataHubungankk, $dataPenduduk, $dataAnggotakk) }}</td>
+                </tr>
+                </thead>
+              </table>
+            </div>
+              @endif
+              @endforeach
+            <br>
+            <hr><hr>
+            <br>
             <h1>Daftar Anggota Kartu Keluarga</h1>
             <table width=100% border=1>
               <tr class="thead">
@@ -109,7 +142,7 @@
                     <td>{{ app('App\Http\Controllers\DetailsController')->getNamaPenduduk($listAnggotakk['penduduk_id'], $dataPenduduk) }}</td>
                     <td>{{ app('App\Http\Controllers\DetailsController')->getNamaHubungankk($listAnggotakk['hubungankk_id'], $dataHubungankk) }}</td>
                     <td>{{ $listAnggotakk['statusaktif'] }}</td>
-                    <td>{{ $listAnggotakk['user_id'] }}</td>
+                    <td>{{ app('App\Http\Controllers\DetailsController')->getNamaUser($listAnggotakk['user_id'], $dataAllUser) }}</td>
                     <td>
                         <form action="{{ url('/anggotakk/'.$listAnggotakk['id'].'/edit') }}">
                             <button class="btn btn-warning">Edit</button>

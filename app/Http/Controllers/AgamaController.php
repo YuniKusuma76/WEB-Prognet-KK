@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AgamaController extends Controller
 {
@@ -116,6 +117,19 @@ class AgamaController extends Controller
     {
         $client = new Client();
         $url = "https://api-group8-prognet.manpits.xyz/api/agama/$id";
+
+        // Lakukan query langsung ke database untuk mendapatkan data Agama
+        $agamaData = DB::table('agama')->find($id);
+
+        // Misalnya, jika ada tabel lain yang merujuk pada agama, lakukan pemeriksaan
+        $relatedRecordCount = DB::table('penduduk')->where('agama_id', $id)->count();
+
+        // Periksa apakah ada catatan terkait
+        if ($relatedRecordCount > 0) {
+            $error = "Data ini tidak dapat dihapus karena direferensikan di tabel lain";
+            return redirect()->to('agama')->withErrors($error)->withInput();
+        }
+
         $response = $client->request('DELETE', $url);
         $content = $response->getBody()->getContents();
         $contentArray = json_decode($content, true);

@@ -8,6 +8,7 @@ use App\Http\Controllers\EditAnggotaController;
 use App\Http\Controllers\HubungankkController;
 use App\Http\Controllers\KkController;
 use App\Http\Controllers\PendudukController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +23,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [AuthController::class, 'index'])->name('login')->middleware('guest');
-Route::get('/sign-up', [AuthController::class, 'signup'])->name('register')->middleware('guest');
-Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
-Route::post('/login', [AuthController::class, 'login'])->name('sesi')->middleware('guest');
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/daftar', [AuthController::class, 'signup'])->name('register')->middleware('guest');
+Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard')->middleware('auth');
 

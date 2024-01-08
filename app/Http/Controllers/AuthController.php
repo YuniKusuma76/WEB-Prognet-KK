@@ -14,6 +14,20 @@ class AuthController extends Controller
         return view('user.login');
     }
 
+    public function login(Request $request)
+    {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $auth = Auth::user();
+            $success['token'] = $auth->createToken('auth_token')->plainTextToken;
+            $success['name'] = $auth->name;
+            $success['email'] = $auth->email;
+
+            return redirect()->route('dashboard')->with('success', 'Anda Berhasil Login');
+        } else {
+            return redirect()->route('login')->with('failed', 'Ada Kesalahan pada E-mail dan Password');
+        }
+    }
+
     public function signup()
     {
         return view('user.register');
@@ -29,31 +43,17 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('register')->with('failed', 'Ada Kesalahan dalam Input Data');
-        } else {
-            $input = $request->all();
-            $input['password'] = bcrypt($input['password']);
-            $user = User::create($input);
-
-            $success['name'] = $user->name;
-            $success['email'] = $user->email;
-
-            return redirect()->route('login')->with('success', 'Anda berhasil melakukan Registrasi, Please Login');
+            return redirect()->route('register')->with('failed', 'Data yang Anda masukkan tidak Valid!');
         }
-    }
 
-    public function login(Request $request)
-    {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $auth = Auth::user();
-            $success['token'] = $auth->createToken('auth_token')->plainTextToken;
-            $success['name'] = $auth->name;
-            $success['email'] = $auth->email;
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
+        $user = User::create($input);
 
-            return redirect()->route('dashboard')->with('success', 'Anda Berhasil Login');
-        } else {
-            return redirect()->route('login')->with('failed', 'Ada Kesalahan pada E-mail dan Password');
-        }
+        $success['name'] = $user->name;
+        $success['email'] = $user->email;
+
+        return redirect()->route('login')->with('success', 'Anda berhasil melakukan Registrasi, Please Login');
     }
 
     public function dashboard()

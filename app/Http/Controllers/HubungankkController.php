@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class HubungankkController extends Controller
 {
@@ -36,6 +38,25 @@ class HubungankkController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'hubungankk' => [
+                'required',
+                'unique:hubungankk,hubungankk',
+            ],
+        ];
+
+        $messages = [
+            'hubungankk.unique' => 'Hubungan Kartu Keluarga yang di-Inputkan sudah terdaftar',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect('hubungankk/create')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $hubungankk = $request->hubungankk;
 
         $parameter = [
@@ -117,6 +138,18 @@ class HubungankkController extends Controller
     {
         $client = new Client();
         $url = "https://api-group8-prognet.manpits.xyz/api/hubungankk/$id";
+
+        // Lakukan query langsung ke database untuk mendapatkan data Hubungankk
+        $hubungankkData = DB::table('hubungankk')->find($id);
+
+        // Misalnya, jika ada tabel lain yang merujuk pada Hubungankk, lakukan pemeriksaan
+        $relatedRecordCount = DB::table('anggotakk')->where('hubungankk_id', $id)->count();
+
+        // Periksa apakah ada catatan terkait
+        if ($relatedRecordCount > 0) {
+            $error = "Data ini tidak dapat dihapus karena direferensikan di tabel lain";
+            return redirect()->to('hubungankk')->withErrors($error)->withInput();
+        }
 
         $response = $client->request('DELETE', $url);
         $content = $response->getBody()->getContents();

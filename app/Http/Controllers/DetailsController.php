@@ -44,12 +44,20 @@ class DetailsController extends Controller
         $contentArrayHubungankk = json_decode($contentHubungank, true);
         $dataHubungankk = $contentArrayHubungankk['data'];
 
+        // Mendapatkan data All User
+        $urlAllUser = "https://api-group8-prognet.manpits.xyz/api/all-user";
+        $responseAllUser = $client->request('GET', $urlAllUser);
+        $contentAllUser = $responseAllUser->getBody()->getContents();
+        $contentArrayAllUser = json_decode($contentAllUser, true);
+        $dataAllUser = $contentArrayAllUser['data'];
+
         return view('anggotakk.list', [
             'kkId' => $kkId,
             'dataAnggotakk' => $dataAnggotakk,
             'dataKk' => $dataKk,
             'dataPenduduk' => $dataPenduduk,
             'dataHubungankk' => $dataHubungankk,
+            'dataAllUser' => $dataAllUser,
         ]);
     }
 
@@ -62,6 +70,15 @@ class DetailsController extends Controller
         return $Kk ? $Kk['nokk'] : 'no kk tidak ditemukan';
     }
 
+    public function statusAktif($kkId, $dataKk)
+    {
+        // Cari agama berdasarkan agama_id
+        $Kk = collect($dataKk)->where('id', $kkId)->first();
+
+        // Return nama agama jika ditemukan, atau pesan kesalahan jika tidak
+        return $Kk ? $Kk['statusaktif'] : 'statusaktif tidak ditemukan';
+    }
+
     public function getNamaPenduduk($pendudukId, $dataPenduduk)
     {
         // Cari agama berdasarkan agama_id
@@ -71,6 +88,61 @@ class DetailsController extends Controller
         return $penduduk ? $penduduk['nama'] : 'nama penduduk tidak ditemukan';
     }
 
+    public function getNamaKepalaKeluarga($kkId, $dataKk, $dataHubungankk, $dataPenduduk, $dataAnggotakk)
+    {
+        // Cari KK berdasarkan ID
+        $kk = collect($dataKk)->where('id', $kkId)->first();
+
+        // Jika KK ditemukan, cari kepala keluarga berdasarkan hubungan dan KK ID
+        if ($kk) {
+            $hubungankkIdKepalaKeluarga = collect($dataHubungankk)->where('hubungankk', 'Kepala Keluarga')->first()['id'];
+
+            $kepalaKeluargaId = collect($dataAnggotakk)
+                ->where('kk_id', $kkId)
+                ->where('hubungankk_id', $hubungankkIdKepalaKeluarga)
+                ->first()['penduduk_id'];
+
+            // Cari nama penduduk berdasarkan ID
+            $namaKepalaKeluarga = $this->getNamaPenduduk($kepalaKeluargaId, $dataPenduduk);
+
+            return $namaKepalaKeluarga;
+        } else {
+            return 'KK tidak ditemukan';
+        }
+    }
+
+    public function getAlamatKepalaKeluarga($kkId, $dataKk, $dataHubungankk, $dataPenduduk, $dataAnggotakk)
+    {
+        // Cari KK berdasarkan ID
+        $kk = collect($dataKk)->where('id', $kkId)->first();
+
+        // Jika KK ditemukan, cari kepala keluarga berdasarkan hubungan dan KK ID
+        if ($kk) {
+            $hubungankkIdKepalaKeluarga = collect($dataHubungankk)->where('hubungankk', 'Kepala Keluarga')->first()['id'];
+
+            $kepalaKeluargaId = collect($dataAnggotakk)
+                ->where('kk_id', $kkId)
+                ->where('hubungankk_id', $hubungankkIdKepalaKeluarga)
+                ->first()['penduduk_id'];
+
+            // Cari alamat penduduk berdasarkan ID
+            $alamatKepalaKeluarga = $this->getAlamatPenduduk($kepalaKeluargaId, $dataPenduduk);
+
+            return $alamatKepalaKeluarga;
+        } else {
+            return 'KK tidak ditemukan';
+        }
+    }
+
+    public function getAlamatPenduduk($pendudukId, $dataPenduduk)
+    {
+        // Cari alamat penduduk berdasarkan ID
+        $penduduk = collect($dataPenduduk)->where('id', $pendudukId)->first();
+
+        // Return alamat penduduk jika ditemukan, atau pesan kesalahan jika tidak
+        return $penduduk ? $penduduk['alamat'] : 'alamat penduduk tidak ditemukan';
+    }
+
     public function getNamaHubungankk($hubungankkId, $dataHubungankk)
     {
         // Cari agama berdasarkan agama_id
@@ -78,6 +150,15 @@ class DetailsController extends Controller
 
         // Return nama agama jika ditemukan, atau pesan kesalahan jika tidak
         return $hubungankk ? $hubungankk['hubungankk'] : 'hubungan tidak ditemukan';
+    }
+
+    public function getNamaUser($userId, $dataAllUser)
+    {
+        // Cari agama berdasarkan agama_id
+        $allUser = collect($dataAllUser)->where('id', $userId)->first();
+
+        // Return nama agama jika ditemukan, atau pesan kesalahan jika tidak
+        return $allUser ? $allUser['name'] : 'user tidak ditemukan';
     }
 
     public function destroy(string $id)

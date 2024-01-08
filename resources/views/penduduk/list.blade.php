@@ -104,7 +104,7 @@
                     <td>{{ $penduduk['nik'] }}</td>
                     <td>{{ $penduduk['nama'] }}</td>
                     <td>{{ $penduduk['alamat'] }}</td>
-                    <td>{{ $penduduk['lahir'] }}</td>
+                    <td>{{ date('d-m-Y',strtotime($penduduk['lahir'])) }}</td>
                     <td>{{ app('App\Http\Controllers\PendudukController')->getAgamaName($penduduk['agama_id'], $dataAgama) }}</td>
                     <td>
                       <form action="{{ url('/penduduk/'.$penduduk['id'].'/edit') }}">

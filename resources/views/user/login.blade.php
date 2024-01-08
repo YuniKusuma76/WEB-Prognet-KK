@@ -45,11 +45,11 @@
 				</div>
 				<div class="div">
 					<h5>Password</h5>
-					<input type="password" class="input" id="password" name="password">
+					<input type="password" class="input" id="password" name="password" required>
 				</div>
 			</div>
-			<a href="/sign-up" id="daftarLink">Sign Up Here!</a>
-			<input type="submit" class="btn" value="Sign in" name="masuk" id="masukBtn">
+			<a href="/daftar" id="daftarLink">Daftar Disini!</a>
+			<input type="submit" class="btn" value="Masuk" name="masuk" id="masukBtn">
 		</form>
 	</div>
 </div>

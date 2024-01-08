@@ -17,7 +17,7 @@
 		<img src="img/foto3.svg">
 	  </div>
 	<div class="login-content">
-		<form action="/register" method="post">
+		<form action="/register" method="POST">
 			@csrf
 			<h2 class="title">iFamilyCard</h2>
 			<div class="input-div one">
@@ -56,8 +56,8 @@
 					<input type="password" class="input" id="confirm_password" name="confirm_password">
 				</div>
 			</div>
-			<a href="/" id="daftarLink">Sign In Here!</a>
-			<input type="submit" class="btn" value="Sign in" name="masuk" id="masukBtn">
+			<a href="/" id="daftarLink">Masuk Disini!</a>
+			<input type="submit" class="btn" value="Daftar" name="masuk" id="masukBtn">
 		</form>
 	</div>
 </div>

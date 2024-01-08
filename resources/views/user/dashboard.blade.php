@@ -127,7 +127,7 @@
             timer: 1500
         });
     </script>
-@endif
+    @endif
 </body>
 
 </html>
