@@ -69,36 +69,45 @@
             <h1>Data Kartu Keluarga</h1>
             <div class="card-body mb-5">
               <table width=100%>
+              @php
+                $infoDisplayed = false;
+              @endphp
+
               @foreach ($dataAnggotakk as $listAnggotakk)
-              @if ($listAnggotakk['kk_id'] == $kkId['id'])
-              <thead>
-                {{-- Kolom No KK --}}
-                <tr>
-                  <td>No. Kartu Keluarga</td>
-                  <td>: {{ app('App\Http\Controllers\DetailsController')->getNoKk($listAnggotakk['kk_id'], $dataKk) }}</td>
-                </tr>
-                {{-- Kolom Nama Kepala Keluarga --}}
-                <tr>
-                  <td>Kepala Keluarga</td>
-                  <td>: {{ app('App\Http\Controllers\DetailsController')->getNamaKepalaKeluarga($listAnggotakk['kk_id'], $dataKk, $dataHubungankk, $dataPenduduk, $dataAnggotakk) }}</td>
-                </tr>
-                {{-- Kolom Status Aktif KK --}}
-                <tr>
-                  <td>Status Aktif</td>
-                  <td>: {{ app('App\Http\Controllers\DetailsController')->statusAktif($listAnggotakk['kk_id'], $dataKk) }}</td>
-                </tr>
-                <tr>
-                  <td>Alamat</td>
-                  <td>: {{ app('App\Http\Controllers\DetailsController')->getAlamatKepalaKeluarga($listAnggotakk['kk_id'], $dataKk, $dataHubungankk, $dataPenduduk, $dataAnggotakk) }}</td>
-                </tr>
-                </thead>
+                @if ($listAnggotakk['kk_id'] == $kkId['id'] && !$infoDisplayed)
+                    <thead>
+                        {{-- Kolom No KK --}}
+                        <tr>
+                            <td>No. Kartu Keluarga</td>
+                            <td>: {{ app('App\Http\Controllers\DetailsController')->getNoKk($listAnggotakk['kk_id'], $dataKk) }}</td>
+                        </tr>
+                        {{-- Kolom Nama Kepala Keluarga --}}
+                        <tr>
+                            <td>Kepala Keluarga</td>
+                            <td>: {{ app('App\Http\Controllers\DetailsController')->getNamaKepalaKeluarga($listAnggotakk['kk_id'], $dataKk, $dataHubungankk, $dataPenduduk, $dataAnggotakk) }}</td>
+                        </tr>
+                        {{-- Kolom Status Aktif KK --}}
+                        <tr>
+                            <td>Status Aktif</td>
+                            <td>: {{ app('App\Http\Controllers\DetailsController')->statusAktif($listAnggotakk['kk_id'], $dataKk) }}</td>
+                        </tr>
+                        <tr>
+                            <td>Alamat</td>
+                            <td>: {{ app('App\Http\Controllers\DetailsController')->getAlamatKepalaKeluarga($listAnggotakk['kk_id'], $dataKk, $dataHubungankk, $dataPenduduk, $dataAnggotakk) }}</td>
+                        </tr>
+                    </thead>
+                    @php
+                    $infoDisplayed = true;
+              @endphp
+                @endif
+              @endforeach
               </table>
             </div>
-              @endif
-              @endforeach
+
             <br>
             <hr><hr>
             <br>
+
             <h1>Daftar Anggota Kartu Keluarga</h1>
             <table width=100% border=1>
               <tr class="thead">
@@ -112,7 +121,7 @@
               </tr>
             
               <tr class="tbody">
-                <form action="/anggotakk/create" method="get">
+                <form action="/anggotakk/create/{{ $kkId['id'] }}" method="get">
                   <button type="submit" class="btn btn-success">Tambah Anggotakk</button>
               </form>
                 <form action="/kk">
@@ -137,7 +146,7 @@
                 @foreach ($dataAnggotakk as $listAnggotakk)
                   @if ($listAnggotakk['kk_id'] == $kkId['id'])
                   <tr>
-                    <td>{{ $i }}</td>
+                    <td><?= $i++; ?></td>
                     <td>{{ app('App\Http\Controllers\DetailsController')->getNoKk($listAnggotakk['kk_id'], $dataKk) }}</td>
                     <td>{{ app('App\Http\Controllers\DetailsController')->getNamaPenduduk($listAnggotakk['penduduk_id'], $dataPenduduk) }}</td>
                     <td>{{ app('App\Http\Controllers\DetailsController')->getNamaHubungankk($listAnggotakk['hubungankk_id'], $dataHubungankk) }}</td>
@@ -155,7 +164,6 @@
                     </td>
                   </tr>
                   @endif
-                  <?php $i++ ?>
                 @endforeach
             </table>
           </div>

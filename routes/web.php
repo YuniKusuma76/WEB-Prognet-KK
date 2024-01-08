@@ -49,7 +49,7 @@ Route::delete('/penduduk/{id}', [PendudukController::class, 'destroy'])->middlew
 
 Route::get('/daftar/{id}/keluarga', [DetailsController::class, 'indexAnggotakk'])->middleware('auth');
 
-Route::get('/anggotakk/create', [CreateAnggotaController::class, 'formAnggotakk'])->middleware('auth');
+Route::get('/anggotakk/create/{id}', [CreateAnggotaController::class, 'formAnggotakk'])->name('anggotakk')->middleware('auth');
 Route::post('/anggotakk/simpan', [CreateAnggotaController::class, 'simpanAnggotakk'])->middleware('auth');
 
 Route::get('/anggotakk/{id}/edit', [EditAnggotaController::class, 'editAnggotakk'])->middleware('auth');

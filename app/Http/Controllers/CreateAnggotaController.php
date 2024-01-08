@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 
 class CreateAnggotaController extends Controller
 {
-    public function formAnggotakk()
+    public function formAnggotakk($kk_id)
     {
         $client = new Client();
 
-        $urlKk = "https://api-group8-prognet.manpits.xyz/api/kk";
+        $urlKk = "https://api-group8-prognet.manpits.xyz/api/kk/{$kk_id}";
         $responseKk = $client->request('GET', $urlKk);
         $contentKk = $responseKk->getBody()->getContents();
-        $kkOptions = json_decode($contentKk, true)['data'];
+        $kkData = json_decode($contentKk, true)['data'];
 
         $urlPenduduk = "https://api-group8-prognet.manpits.xyz/api/penduduk";
         $responsePenduduk = $client->request('GET', $urlPenduduk);
@@ -26,11 +26,12 @@ class CreateAnggotaController extends Controller
         $contentHubungankk = $responseHubungankk->getBody()->getContents();
         $hubungankkOptions = json_decode($contentHubungankk, true)['data'];
 
-        return view('anggotakk.new', compact('kkOptions', 'pendudukOptions', 'hubungankkOptions'));
+        return view('anggotakk.new', compact('kkData', 'pendudukOptions', 'hubungankkOptions'));
     }
 
     public function simpanAnggotakk(Request $request)
     {
+
         $kk_id = $request->kk_id;
         $penduduk_id = $request->penduduk_id;
         $hubungankk_id = $request->hubungankk_id;
@@ -57,7 +58,7 @@ class CreateAnggotaController extends Controller
 
         if ($contentArray['status'] != true) {
             $error = $contentArray['data'];
-            return redirect()->to('/anggotakk/create')->withErrors($error)->withInput();
+            return redirect()->route('anggotakk', ['id' => $kk_id])->withErrors($error)->withInput();
         } else {
             return redirect()->to('/kk')->with('success', 'Berhasil memasukkan Data, Silakan cek pada Anggota Kartu Keluarga');
         }
