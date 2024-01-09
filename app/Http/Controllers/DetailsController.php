@@ -17,6 +17,8 @@ class DetailsController extends Controller
         $kkId = json_decode($contentKkId, true)['data'];
 
         // Mendapatkan data Anggotakk
+
+
         $urlAnggotakk = "https://api-group8-prognet.manpits.xyz/api/anggotakk";
         $responseAnggotakk = $client->request('GET', $urlAnggotakk);
         $contentAnggotakk = $responseAnggotakk->getBody()->getContents();
