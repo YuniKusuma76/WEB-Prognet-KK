@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AgamaController extends Controller
 {
@@ -37,6 +38,25 @@ class AgamaController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'agama' => [
+                'required',
+                'unique:agama,agama',
+            ],
+        ];
+
+        $messages = [
+            'agama.unique' => 'Agama yang di-Inputkan sudah terdaftar',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect('agama/create')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $agama = $request->agama;
 
         $parameter = [
