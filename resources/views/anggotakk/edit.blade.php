@@ -83,12 +83,12 @@
                 @csrf
                 @method('PUT')
                 <div class="form-group">
-                    <label>Kk ID</label>
+                    <label>KK ID</label>
                     <input type="text" name="kk_id" id="kk_id" class="form-control"
                            value="{{ isset($anggotakk['kk_id'])?$anggotakk['kk_id']:old['kk_id'] }}" readonly>
                 </div>                                
                   <div class="form-group">
-                      <label>Penduduk ID</label>
+                      <label>Penduduk</label>
                         <select name="penduduk_id" id="penduduk_id" class="form-control">
                             <option value="">-- Pilih --</option>
                             @foreach ($pendudukOptions as $penduduk)
@@ -99,7 +99,7 @@
                         </select>
                   </div>
                   <div class="form-group">
-                      <label>Hubungan Kartu Keluarga ID</label>
+                      <label>Hubungan Kartu Keluarga</label>
                         <select name="hubungankk_id" id="hubungankk_id" class="form-control">
                             <option value="">-- Pilih --</option>
                             @foreach ($hubungankkOptions as $hubungankk)
@@ -118,7 +118,7 @@
                         </select>
                   </div>
                   <div class="form-group">
-                      <label>User ID</label>
+                      <label>Nama User</label>
                         <select name="user_id" id="user_id" class="form-control">
                             <option value="{{ auth()->user()->id }}">{{ auth()->user()->name }}</option>
                         </select>

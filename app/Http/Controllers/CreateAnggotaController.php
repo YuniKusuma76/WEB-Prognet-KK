@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CreateAnggotaController extends Controller
 {
@@ -31,12 +32,22 @@ class CreateAnggotaController extends Controller
 
     public function simpanAnggotakk(Request $request)
     {
-
         $kk_id = $request->kk_id;
         $penduduk_id = $request->penduduk_id;
         $hubungankk_id = $request->hubungankk_id;
         $statusaktif = $request->statusaktif;
         $user_id = $request->user_id;
+
+        // Validasi NIK unique dalam nomor KK yang sama
+        $existingAnggota = DB::table('anggotakk')
+            ->where('kk_id', $kk_id)
+            ->where('penduduk_id', $penduduk_id)
+            ->first();
+
+        if ($existingAnggota) {
+            $error = 'NIK ini sudah terdaftar dalam nomor KK yang sama.';
+            return redirect()->route('anggotakk', ['id' => $kk_id])->withErrors($error)->withInput();
+        }
 
         $parameter = [
             'kk_id' => $kk_id,
@@ -60,7 +71,7 @@ class CreateAnggotaController extends Controller
             $error = $contentArray['data'];
             return redirect()->route('anggotakk', ['id' => $kk_id])->withErrors($error)->withInput();
         } else {
-            return redirect()->to('/kk')->with('success', 'Berhasil memasukkan Data, Silakan cek pada Anggota Kartu Keluarga');
+            return redirect()->route('keluarga', ['id' => $kk_id])->with('success', 'Berhasil memasukkan Data, Silakan cek pada Anggota Kartu Keluarga');
         }
     }
 }

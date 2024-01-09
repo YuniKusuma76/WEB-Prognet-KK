@@ -43,11 +43,7 @@ Route::get('/penduduk/{id}/edit', [PendudukController::class, 'editPenduduk'])->
 Route::put('/penduduk/{id}/update', [PendudukController::class, 'updatePenduduk'])->middleware('auth');
 Route::delete('/penduduk/{id}', [PendudukController::class, 'destroy'])->middleware('auth');
 
-
-
-
-
-Route::get('/daftar/{id}/keluarga', [DetailsController::class, 'indexAnggotakk'])->middleware('auth');
+Route::get('/daftar/{id}/keluarga', [DetailsController::class, 'indexAnggotakk'])->name('keluarga')->middleware('auth');
 
 Route::get('/anggotakk/create/{id}', [CreateAnggotaController::class, 'formAnggotakk'])->name('anggotakk')->middleware('auth');
 Route::post('/anggotakk/simpan', [CreateAnggotaController::class, 'simpanAnggotakk'])->middleware('auth');
